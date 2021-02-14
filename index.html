@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Entrainement Fractions</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 24pt;}
+        input {
+            font-size: 24pt;}
+        input[type=number] { 
+            -moz-appearance: textfield;
+            appearance: textfield;
+            height: 50px;
+            width: 50px;
+            margin: 4px;
+            text-align: center}
+        input::-webkit-inner-spin-button,
+        input::-webkit-outer-spin-button { 
+            -webkit-appearance: none;
+            margin:0;}
+        input::-o-inner-spin-button,
+        input::-o-outer-spin-button { 
+            -o-appearance: none;
+            margin:0;}
+        span.math{
+            font-size: 30pt;
+            white-space: nowrap;}
+        span.frac{
+            display: inline-block;
+            position: relative;
+            vertical-align: middle;}
+        span.haut{
+            display: block;
+            text-align: center;
+            font-size: 30pt;}
+        span.bas{
+            display: block;
+            border-top: 2px solid;
+            text-align: center;
+            font-size: 30pt;}
+        span.aDroite{
+            float: right;}
+        div.correction{
+            color: blue;}
+    </style>
+    <script language="javascript">
+        function fraction(a,b) {
+            return '<span class="frac"><span class="haut">'+a+'</span><span class="bas">'+b+'</span></span>'};
+        function PGCD(a,b) {while(a!=b) {if (a>b) {a=a-b} else {b=b-a}};return a};
+        function controle(form) {
+            var haut = form.haut.value;
+            var bas  = form.bas.value;
+            var p  = form.p;
+            var q  = form.q;
+            if (bas == '' || haut == '' || bas*p != haut*q) {form.querySelector('label[name="reponse"]').innerHTML = "FAUX";}
+            else if (PGCD(1*haut,1*bas)==1) {form.querySelector('label[name="reponse"]').innerHTML = "VRAI";}
+            else {form.querySelector('label[name="reponse"]').innerHTML = "VRAI, mais simplifiable";}};
+        function afficherCorrection(form) {
+            form.querySelector('div[class="correction"]').innerHTML = form.correction};
+    </script>
+</head>
+
+<body>
+  <fieldset>
+      <legend>Somme ☆</legend>
+      <form name="somme_1">
+        <label name="question"></label>
+        <span class="frac"><span class="haut"><input type="number" name="haut"></span><span class="bas"><input type="number" name="bas"></span></span>
+        <input type="button" onClick="controle(somme_1)" value="Vérifier"/>
+        <label name="reponse"></label>
+        <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(somme_1)" value="Correction"/></span></div>
+        <script language="javascript">
+            document.somme_1.haut.value = ''
+            document.somme_1.bas.value  = ''
+            var liste = [2,3,4,5,6,7,8,9,10,11,12];
+            var a = liste[Math.floor(Math.random() * 11)];
+            var b = liste[Math.floor(Math.random() * 11)];
+            var d = liste[Math.floor(Math.random() * 11)];
+            while (PGCD(d,a)*PGCD(d,b)*PGCD(d,a+b)!=1) {a = liste[Math.floor(Math.random() * 11)]; b = liste[Math.floor(Math.random() * 11)]; d = liste[Math.floor(Math.random() * 11)]};
+            document.somme_1.p = a+b;
+            document.somme_1.q = d;
+            var txt = fraction(a,d) + ' + ' + fraction(b,d) + ' =';
+            document.somme_1.querySelector('label[name="question"]').innerHTML = txt;
+            document.somme_1.correction =
+                'Les dénominateurs sont les mêmes, on peut directement ajouter les numérateurs <br/>'
+                + '<span class="math">' + fraction(a,d) + ' + ' + fraction(b,d) + '</span> '
+                + '<span class="math"> = ' + fraction(a + ' + ' + b,d) + '</span> '
+                + '<span class="math"> = ' + fraction(a+b,d) + '</span>';
+        </script>
+      </form>
+  </fieldset>
+
+  <fieldset>
+      <legend>Somme ☆☆</legend>
+      <form name="somme_2">
+        <label name="question"></label>
+        <span class="frac"><span class="haut"><input type="number" name="haut"></span><span class="bas"><input type="number" name="bas"></span></span>
+        <input type="button" onClick="controle(somme_2)" value="Vérifier"/>
+        <label name="reponse"></label>
+        <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(somme_2)" value="Correction"/></span></div>
+        <script language="javascript">
+            document.somme_2.haut.value = ''
+            document.somme_2.bas.value  = ''
+            var liste = [2,3,4,5,6,7,8,9,10,11,12];
+            var CM = [2,3,4,5,6,7];
+            var a = liste[Math.floor(Math.random() * 11)];
+            var b = liste[Math.floor(Math.random() * 8)];
+            var c = liste[Math.floor(Math.random() * 11)];
+            var cm = CM[Math.floor(Math.random() * 6)];
+            var d = b*cm;
+            while (PGCD(a,b)!=1) {a = liste[Math.floor(Math.random() * 11)];};
+            while (PGCD(c,d)!=1) {c = liste[Math.floor(Math.random() * 11)];};
+            document.somme_2.p = a*d+b*c;
+            document.somme_2.q = b*d;
+            var txt = fraction(a,b) + ' + ' + fraction(c,d) + ' =';
+            document.somme_2.querySelector('label[name="question"]').innerHTML = txt;
+            document.somme_2.correction =
+                'Les dénominateurs sont différents on commence par écrire les fractions sur le même dénominateur <br/>'
+                + '<span class="math">' + fraction(a,b) + ' + ' + fraction(c,d) + '</span> '
+                + '<span class="math"> = ' + fraction(a + ' &times; ' + cm, b + ' &times; ' + cm) + ' + ' + fraction(c,d) + '</span> '
+                + '<span class="math"> = ' + fraction(a * cm, d) + ' + ' + fraction(c, d) + '</span> '
+                + '<span class="math"> = ' + fraction(a * cm + ' + ' + c, d) + '</span> '
+                + '<span class="math"> = ' + fraction(a * cm + c, d)+ '</span>';
+            var pgcd = PGCD(a * cm + c, d);
+            if (pgcd != 1) {document.somme_2.correction += '<br/>On peut simplifier par ' + pgcd + ' :<br/><span class="math">' + fraction(a * cm + c, d)+ '</span> <span class="math"> = ' + fraction(a * cm + c + ' &div; ' + pgcd, d + ' &div; ' + pgcd)+ '</span> <span class="math"> = ' + fraction((a * cm + c)/pgcd, d/pgcd)+ '</span>'};
+        </script>
+      </form>
+  </fieldset>
+    
+  <fieldset>
+      <legend>Somme ☆☆☆</legend>
+      <form name="somme_3">
+        <label name="question"></label>
+        <span class="frac"><span class="haut"><input type="number" name="haut"></span><span class="bas"><input type="number" name="bas"></span></span>
+        <input type="button" onClick="controle(somme_3)" value="Vérifier"/>
+        <label name="reponse"></label>
+        <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(somme_3)" value="Correction"/></span></div>
+        <script language="javascript">
+            document.somme_3.haut.value = ''
+            document.somme_3.bas.value  = ''
+            var liste = [2,3,4,5,6,7,8,9,10,11,12];
+            var a = liste[Math.floor(Math.random() * 11)];
+            var b = liste[Math.floor(Math.random() * 11)];
+            var c = liste[Math.floor(Math.random() * 11)];
+            var d = liste[Math.floor(Math.random() * 11)];
+            while ((PGCD(b,d)-b)*(PGCD(b,d)-d)==0) {d = liste[Math.floor(Math.random() * 11)];};
+            while (PGCD(a,b)!=1) {a = liste[Math.floor(Math.random() * 11)];};
+            while (PGCD(c,d)!=1) {c = liste[Math.floor(Math.random() * 11)];};
+            var com = b*d/PGCD(b,d);
+            document.somme_3.p = a*d+b*c;
+            document.somme_3.q = b*d;
+            var txt = fraction(a,b) + ' + ' + fraction(c,d) + ' =';
+            document.somme_3.querySelector('label[name="question"]').innerHTML = txt;
+            document.somme_3.correction =
+                'Les dénominateurs sont différents on commence par écrire les fractions sur le même dénominateur <br/>'
+                + '<span class="math">' + fraction(a,b) + ' + ' + fraction(c,d) + '</span> '
+                + '<span class="math"> = ' + fraction(a + ' &times; ' + com/b, b + ' &times; ' + com/b) + ' + ' + fraction(c + ' &times; ' + com/d, d + ' &times; ' + com/d) + '</span> '
+                + '<span class="math"> = ' + fraction(a*com/b, com) + ' + ' + fraction(c*com/d, com) + '</span> '
+                + '<span class="math"> = ' + fraction(a*com/b + ' + ' + c*com/d, com) + '</span> '
+                + '<span class="math"> = ' + fraction(a*com/b + c*com/d, com) + '</span> '
+        </script>
+      </form>
+  </fieldset>
+
+  <fieldset>
+      <legend>Produit</legend>
+      <form name="produit">
+        <label name="question"></label>
+        <span class="frac"><span class="haut"><input type="number" name="haut"></span><span class="bas"><input type="number" name="bas"></span></span>
+        <input type="button" onClick="controle(produit)" value="Vérifier"/>
+        <label name="reponse"></label>
+        <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(produit)" value="Correction"/></span></div>
+        <script language="javascript">
+            document.produit.haut.value = ''
+            document.produit.bas.value  = ''
+            var liste = [2,3,4,5,6,7,8,9,10,11,12];
+            var a = liste[Math.floor(Math.random() * 11)];
+            var b = liste[Math.floor(Math.random() * 11)];
+            var c = liste[Math.floor(Math.random() * 11)];
+            var d = liste[Math.floor(Math.random() * 11)];
+            while (PGCD(a,b)!=1) {a = liste[Math.floor(Math.random() * 11)];};
+            while (PGCD(c,d)*PGCD(d,a)!=1) {d = liste[Math.floor(Math.random() * 11)];};
+            document.produit.p = a*c;
+            document.produit.q = b*d;
+            var txt = fraction(a,b) + ' &times; ' + fraction(c,d) + ' =';
+            document.produit.querySelector('label[name="question"]').innerHTML = txt;
+            document.produit.correction =
+                '<span class="math">' + fraction(a,b) + ' &times; ' + fraction(c,d) + '</span> '
+                + '<span class="math"> = ' + fraction(a + ' &times; ' + c, b + ' &times; ' + d) + '</span> '
+                + '<span class="math"> = ' + fraction(a * c, b * d) + '</span> ';
+            var pgcd = PGCD(a * c, b * d);
+            if (pgcd != 1) {document.produit.correction += '<br/>On peut simplifier par ' + pgcd + ' :<br/><span class="math">' + fraction(a * c, b * d)+ '</span> <span class="math"> = ' + fraction(a * c + ' &div; ' + pgcd, b * d + ' &div; ' + pgcd)+ '</span> <span class="math"> = ' + fraction(a*c/pgcd, b*d/pgcd)+ '</span>'};
+        </script>
+      </form>
+  </fieldset>
+
+  <fieldset>
+      <legend>Quotient</legend>
+      <form name="quotient">
+        <label name="question"></label>
+        <span class="frac"><span class="haut"><input type="number" name="haut"></span><span class="bas"><input type="number" name="bas"></span></span>
+        <input type="button" onClick="controle(quotient)" value="Vérifier"/>
+        <label name="reponse"></label>
+        <div class="correction"><span class="aDroite"><input type="button" onClick="afficherCorrection(quotient)" value="Correction"/></span></div>
+        <script language="javascript">
+            document.quotient.haut.value = ''
+            document.quotient.bas.value  = ''
+            var liste = [2,3,4,5,6,7,8,9,10,11,12];
+            var a = liste[Math.floor(Math.random() * 11)];
+            var b = liste[Math.floor(Math.random() * 11)];
+            var c = liste[Math.floor(Math.random() * 11)];
+            var d = liste[Math.floor(Math.random() * 11)];
+            while (PGCD(a,b)!=1) {a = liste[Math.floor(Math.random() * 11)];};
+            while (PGCD(c,d)*PGCD(c,a)!=1) {c = liste[Math.floor(Math.random() * 11)];};
+            document.quotient.p = a*d;
+            document.quotient.q = b*c;
+            var txt = fraction(a,b) + ' &div; ' + fraction(c,d) + ' =';
+            document.quotient.querySelector('label[name="question"]').innerHTML = txt;
+            document.quotient.correction =
+                'Diviser par un nombre revient à multiplier par son inverse. <br/>'
+                + '<span class="math">' + fraction(a,b) + ' &div; ' + fraction(c,d) + '</span> '
+                + '<span class="math"> = ' + fraction(a,b) + ' &times; ' + fraction(d,c) + '</span> '
+                + '<span class="math"> = ' + fraction(a + ' &times; ' + d, b + ' &times; ' + c) + '</span> '
+                + '<span class="math"> = ' + fraction(a * d, b * c) + '</span> ';
+            var pgcd = PGCD(a * d, b * c);
+            if (pgcd != 1) {document.quotient.correction += '<br/>On peut simplifier par ' + pgcd + ' :<br/><span class="math">' + fraction(a * d, b * c)+ '</span> <span class="math"> = ' + fraction(a * d + ' &div; ' + pgcd, b * c + ' &div; ' + pgcd)+ '</span> <span class="math"> = ' + fraction(a*d/pgcd, b*c/pgcd)+ '</span>'};
+        </script>
+      </form>
+  </fieldset>
+</body>
+</html>
